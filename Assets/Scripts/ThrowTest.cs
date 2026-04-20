@@ -7,6 +7,8 @@ public class ThrowTest : MonoBehaviour
     public Camera cam;
     public Transform holdPoint;
     public LineRenderer line;
+    public PowerBar powerBar;
+
 
     [Header("Fuerza")]
     public float maxForce = 15f;
@@ -19,48 +21,74 @@ public class ThrowTest : MonoBehaviour
 
     private Rigidbody heldObject;
 
+    private enum State { Aiming, Power};
+    private State currentState = State.Aiming;
+
+    void Start()
+    {
+        line.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+    }
+
+
     void Update()
     {
         if (Mouse.current == null) return;
 
         //Aim();
-
-        // 🖱️ Click: intentar coger
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        if(currentState == State.Aiming)
         {
-            if (heldObject == null)
-                TryPickUp();
+           // Click: intentar coger
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                if (heldObject == null)
+                    TryPickUp();
 
-            charging = true;
-        }
+                charging = true;
+            }
 
-        // ⚡ Mantener: cargar + parábola
-        if (Mouse.current.leftButton.isPressed && charging && heldObject != null)
+            // Mantener: cargar + parábola
+            if (Mouse.current.leftButton.isPressed && charging && heldObject != null)
+            {
+                DrawTrajectory();
+            }
+
+            // Soltar: lanzar
+            if (Mouse.current.leftButton.wasReleasedThisFrame && heldObject != null)
+            {
+                currentState = State.Power;
+                powerBar.StartPower();
+                line.positionCount = 0;
+            } 
+        } 
+
+        else if (currentState == State.Power)
         {
-            ChargeForce();
-            DrawTrajectory();
-        }
+            // Cuando haces click para elegir fuerza
+            if (!powerBar.IsActive)
+            {
+                float finalForce = powerBar.CurrentForce;
 
-        // 🚀 Soltar: lanzar
-        if (Mouse.current.leftButton.wasReleasedThisFrame && charging)
-        {
-            Throw();
-            charging = false;
-            force = 0;
-            line.positionCount = 0;
-        }
+                Throw(finalForce);
+
+                powerBar.StopPower();
+                currentState = State.Aiming;
+            }
+        }   
+        
     }
 
-    // 🎯 Apuntar con ratón (Input System)
+    // Apuntar con ratón (Input System)
     /*void Aim()
     {
         Vector2 delta = Mouse.current.delta.ReadValue();
         transform.Rotate(-delta.y * 0.1f, delta.x * 0.1f, 0f);
     }*/
 
-    // 📦 COGER OBJETO
+    // COGER OBJETO
     void TryPickUp()
     {
+        line.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
         if (Physics.Raycast(ray, out RaycastHit hit, 3f))
@@ -80,26 +108,20 @@ public class ThrowTest : MonoBehaviour
                 );
 
 
-                // 📌 mover a mano
+                // mover a mano
                 heldObject.transform.SetParent(holdPoint);
                 heldObject.transform.localPosition = Vector3.zero;
                 heldObject.transform.localRotation = Quaternion.identity;
 
-                // 🧹 limpiar movimiento
+                // limpiar movimiento
                 heldObject.linearVelocity = Vector3.zero;
                 heldObject.angularVelocity = Vector3.zero;
             }
         }
     }
 
-    // ⚡ Cargar fuerza
-    void ChargeForce()
-    {
-        force += Time.deltaTime * 10f;
-        force = Mathf.Clamp(force, 0, maxForce);
-    }
 
-    // 🟢 DIBUJAR PARÁBOLA
+    // DIBUJAR PARÁBOLA
     void DrawTrajectory()
     {
         Vector3 startPos = holdPoint.position;
@@ -108,9 +130,11 @@ public class ThrowTest : MonoBehaviour
             cam.transform.eulerAngles.x,
             cam.transform.eulerAngles.y,
             0
-        ) * Vector3.forward; // 👈 CLAVE
+        ) * Vector3.forward;
 
-        Vector3 velocity = direction * force;
+        float previewForce = maxForce * 0.7f; 
+
+        Vector3 velocity = direction * previewForce;
 
         Vector3 gravity = Physics.gravity * 1.5f;
 
@@ -129,8 +153,8 @@ public class ThrowTest : MonoBehaviour
         line.SetPositions(positions);
     }
 
-    // 🚀 LANZAR OBJETO
-    void Throw()
+    // LANZAR OBJETO
+    void Throw(float force)
     {
         if (heldObject == null) return;
 

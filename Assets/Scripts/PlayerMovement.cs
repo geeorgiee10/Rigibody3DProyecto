@@ -12,6 +12,7 @@ public class PlayerMovement2 : MonoBehaviour
     private bool isGrounded = false;
     [SerializeField] private float runMultiplier = 2f;
     [SerializeField] private bool isRunning;
+    
 
     //[Header("Player Animations")]
     //[SerializeField] private PlayerAnimations PlayerAnimations;
@@ -35,11 +36,14 @@ public class PlayerMovement2 : MonoBehaviour
         moveInput = value.Get<Vector2>();
     }
 
-    public void OnJump(InputValue value)
+    private bool IsGrounded() => Physics.Raycast(transform.position, -transform.up, 1.1f);
+
+    public void OnJump()
     {
-        if (value.isPressed && isGrounded)
+        if (IsGrounded())
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+            //animator.SetTrigger("Jump");
         }
     }
 
