@@ -136,7 +136,7 @@ public class ThrowTest : MonoBehaviour
 
         Vector3 velocity = direction * previewForce;
 
-        Vector3 gravity = Physics.gravity * 1.5f;
+        Vector3 gravity = Physics.gravity;
 
         Vector3[] positions = new Vector3[points];
 
@@ -171,7 +171,19 @@ public class ThrowTest : MonoBehaviour
 
         Vector3 direction = cam.transform.forward;
 
-        heldObject.AddForce(direction * force, ForceMode.Impulse);
+        if(LevelManager.Instance.tipoNivel == LevelManager.TipoNivel.Espacio)
+        {
+            float multiplier = Physics.gravity.y > -5f ? 1.5f : 1f;
+        
+            heldObject.AddForce(direction * force * multiplier, ForceMode.Impulse);
+        }
+        else
+        {
+            heldObject.AddForce(direction * force, ForceMode.Impulse);
+        }
+
+        
+
 
         heldObject = null;
     }

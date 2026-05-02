@@ -15,6 +15,8 @@ public class TruckTrailer : MonoBehaviour
 
     private bool cinematicaEmpezada = false;
 
+    public TMPro.TextMeshProUGUI countText;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -24,7 +26,7 @@ public class TruckTrailer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        countText.text = $"Objetos en el camión: {count}/{maxObjectos}";
     }
 
     private void OnTriggerEnter(Collider other)
