@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 public class Cinematica : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class Cinematica : MonoBehaviour
     
     [Header("Configuración")]
     public bool reproducirAlInicio = false; 
+
+    [Header("Cambio de escena")]
+    public bool cambiarEscenaAlFinal = false;
+
 
     private float duracionCinematica;
     private float t;
@@ -57,5 +62,10 @@ public class Cinematica : MonoBehaviour
         director.Stop(); // Aseguramos que el director se detenga
         cineObj.SetActive(false);
         if(gameplayObj != null) gameplayObj.SetActive(true);
+
+        if (cambiarEscenaAlFinal)
+        {
+            SceneManager.LoadScene("MenuScene");
+        }
     }
 }

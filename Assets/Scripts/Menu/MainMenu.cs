@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
 
     public void Jugar()
     {
-        SceneManager.LoadScene("MenuNiveles"); 
+        SceneManager.LoadScene("LevelScene"); 
     }
 
     public void Controles()

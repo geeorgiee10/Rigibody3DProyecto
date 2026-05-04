@@ -12476,6 +12476,7 @@ MonoBehaviour:
   cineObj: {fileID: 450631437}
   gameplayObj: {fileID: 679389609}
   reproducirAlInicio: 0
+  cambiarEscenaAlFinal: 1
 --- !u!1001 &451201003
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50495,6 +50496,7 @@ MonoBehaviour:
   cineObj: {fileID: 1681991388}
   gameplayObj: {fileID: 679389609}
   reproducirAlInicio: 1
+  cambiarEscenaAlFinal: 0
 --- !u!320 &1681991390
 PlayableDirector:
   m_ObjectHideFlags: 0
