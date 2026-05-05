@@ -8,6 +8,9 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         menuControles.SetActive(false);
+        Time.timeScale = 1f;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void Jugar()

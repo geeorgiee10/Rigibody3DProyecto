@@ -14,8 +14,12 @@ public class PlayerMovement2 : MonoBehaviour
     [SerializeField] private bool isRunning;
     
 
-    //[Header("Player Animations")]
-    //[SerializeField] private PlayerAnimations PlayerAnimations;
+    [Header("Player Animations")]
+    [SerializeField] private PlayerAnimations PlayerAnimations;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource sonidoAndar;
+    [SerializeField] private AudioSource sonidoSaltar;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,6 +38,14 @@ public class PlayerMovement2 : MonoBehaviour
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
+        if(!sonidoAndar.isPlaying && moveInput != Vector2.zero)
+        {
+            sonidoAndar.Play();
+        }
+        else if (moveInput == Vector2.zero)
+        {
+            sonidoAndar.Stop();
+        }
     }
 
     private bool IsGrounded() => Physics.Raycast(transform.position, -transform.up, 1.1f);
@@ -43,7 +55,11 @@ public class PlayerMovement2 : MonoBehaviour
         if (IsGrounded())
         {
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-            //animator.SetTrigger("Jump");
+            if(!sonidoSaltar.isPlaying)
+            {
+                sonidoSaltar.Play();
+            }
+            PlayerAnimations.AnimacionSaltar1();
         }
     }
 

@@ -59,7 +59,7 @@ public class Cinematica : MonoBehaviour
     void TerminarCinematica()
     {
         isPlaying = false;
-        director.Stop(); // Aseguramos que el director se detenga
+        director.Stop();
         cineObj.SetActive(false);
         if(gameplayObj != null) gameplayObj.SetActive(true);
 

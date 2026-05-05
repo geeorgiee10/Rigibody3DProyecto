@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Space Level.unity
     guid: 5401d30e3eca68c418be726ff833fa35
+  - enabled: 1
+    path: Assets/Scenes/WindLevel.unity
+    guid: 14482e57be588b246b673111aa0b35a0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -19,6 +19,9 @@ public class ThrowTest : MonoBehaviour
     public int points = 25;
     public float timeStep = 0.1f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+
     private Rigidbody heldObject;
 
     private enum State { Aiming, Power};
@@ -157,6 +160,11 @@ public class ThrowTest : MonoBehaviour
     void Throw(float force)
     {
         if (heldObject == null) return;
+
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
 
         heldObject.transform.SetParent(null);
 

@@ -3,6 +3,13 @@ using UnityEngine.SceneManagement;
 
 public class LevelMenu : MonoBehaviour
 {
+    void Start()
+    {
+        Time.timeScale = 1f;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
     public void NormalLevel()
     {
         SceneManager.LoadScene("Normal Level");
@@ -15,7 +22,7 @@ public class LevelMenu : MonoBehaviour
 
     public void WindLevel()
     {
-        SceneManager.LoadScene("Wind Level");
+        SceneManager.LoadScene("WindLevel");
     }
 
     public void VolverMenu()

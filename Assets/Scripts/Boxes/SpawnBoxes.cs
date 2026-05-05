@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class SpawnBoxes : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class SpawnBoxes : MonoBehaviour
     public float masaMax = 2f;
 
     private bool[] ocupados;
+
+
 
     void Start()
     {
@@ -63,7 +66,19 @@ public class SpawnBoxes : MonoBehaviour
 
             if (rb != null)
             {
-                rb.mass = Random.Range(masaMin, masaMax);
+                float masa = Random.Range(masaMin, masaMax);
+                rb.mass = masa;
+
+                TextMeshPro texto = caja.GetComponentInChildren<TextMeshPro>();
+
+                if (texto != null)
+                {
+                    texto.text = masa.ToString("F1") + " kg";
+                }
+                else
+                {
+                    Debug.LogWarning("No se encontró TextMeshPro en la caja");
+                }
             }
 
             // avisar cuando se destruya para liberar el punto
